@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>🐾 Animals · Baby English</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FFFDF7;
+      --dark: #2B2B2B;
+      --radius: 24px;
+      --tab-h: 64px;
+      --header-h: 64px;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ══ HEADER ══ */
+    .header {
+      height: var(--header-h);
+      background: linear-gradient(135deg, #D4FFD4, #AEFFD4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .header-back { text-decoration:none; font-size:26px; line-height:1; }
+    .header-title { font-family:'Fredoka One',cursive; font-size:1.5rem; color:var(--dark); }
+    .header-star  { font-size:26px; }
+
+    /* ══ TABS ══ */
+    .tabs {
+      display: flex;
+      background: #fff;
+      border-bottom: 3px solid #EEE;
+      position: sticky;
+      top: var(--header-h);
+      z-index: 99;
+    }
+    .tab-btn {
+      flex: 1;
+      height: var(--tab-h);
+      border: none;
+      background: transparent;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.05rem;
+      color: #AAA;
+      cursor: pointer;
+      border-bottom: 4px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: color .2s, border-bottom .2s;
+    }
+    .tab-btn.active { color: var(--dark); border-bottom: 4px solid #6BCB77; }
+
+    /* ══ PANELS ══ */
+    .panel { display:none; }
+    .panel.active { display:block; }
+
+    /* ══ TAB 1 — GRID ══ */
+    .grid-panel { padding: 16px 12px 40px; }
+    .grid-intro {
+      text-align: center;
+      font-size: 0.88rem;
+      color: #999;
+      font-weight: 700;
+      margin-bottom: 14px;
+      letter-spacing: 0.5px;
+    }
+    .animal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .animal-tile {
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 8px 12px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 5px 0 rgba(0,0,0,0.13), 0 8px 20px rgba(0,0,0,0.07);
+      transition: transform .12s, box-shadow .12s;
+      border: none;
+      gap: 4px;
+    }
+    .animal-tile:active {
+      transform: translateY(4px) scale(0.95);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.13), 0 4px 10px rgba(0,0,0,0.07);
+    }
+    .tile-emoji-big { font-size: 2.8rem; line-height: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); }
+    .tile-name {
+      font-family: 'Fredoka One', cursive;
+      font-size: 0.95rem;
+      color: white;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      text-align: center;
+      line-height: 1.1;
+    }
+    .tile-sound {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.8);
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    @keyframes pop {
+      0%   { transform: scale(1) rotate(0); }
+      30%  { transform: scale(1.18) rotate(-5deg); }
+      60%  { transform: scale(0.94) rotate(3deg); }
+      100% { transform: scale(1) rotate(0); }
+    }
+    .animal-tile.speaking { animation: pop .5s ease; }
+
+    /* ══ TAB 2 — FLASHCARD ══ */
+    .flash-panel {
+      padding: 16px 20px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* progress */
+    .progress-wrap {
+      width: 100%;
+      max-width: 440px;
+    }
+    .progress-track {
+      height: 10px;
+      background: #EEE;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6BCB77, #3EC9A7);
+      border-radius: 10px;
+      transition: width .4s ease;
+    }
+    .progress-label {
+      text-align: right;
+      font-family: 'Fredoka One', cursive;
+      font-size: 0.9rem;
+      color: #BBB;
+      margin-top: 4px;
+    }
+
+    /* card */
+    .flash-card {
+      width: 100%;
+      max-width: 340px;
+      border-radius: 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 20px 28px;
+      gap: 6px;
+      box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 16px 40px rgba(0,0,0,0.10);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      transition: background .4s;
+      min-height: 340px;
+    }
+    .flash-card::before {
+      content: '';
+      position: absolute;
+      top: -30%; left: -20%;
+      width: 60%; height: 60%;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .fc-emoji {
+      font-size: 7rem;
+      line-height: 1;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+      animation: floatAnimal 3s ease-in-out infinite;
+    }
+    @keyframes floatAnimal {
+      0%,100% { transform: translateY(0) rotate(-2deg); }
+      50%      { transform: translateY(-10px) rotate(2deg); }
+    }
+
+    .fc-name {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.4rem;
+      color: white;
+      text-shadow: 0 3px 8px rgba(0,0,0,0.18);
+      line-height: 1;
+      margin-top: 8px;
+    }
+    .fc-sound-label {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.85);
+      font-style: italic;
+    }
+    .tap-hint {
+      position: absolute;
+      bottom: 16px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.6);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    @keyframes flipIn {
+      0%   { transform: rotateY(90deg) scale(0.8); opacity:0; }
+      100% { transform: rotateY(0deg)  scale(1);   opacity:1; }
+    }
+    .flash-card.flip { animation: flipIn .35s ease-out; }
+
+    @keyframes speakPulse {
+      0%,100% { box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 16px 40px rgba(0,0,0,0.10); }
+      50%      { box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 16px 60px rgba(0,0,0,0.20), 0 0 0 14px rgba(255,255,255,0.28); }
+    }
+    .flash-card.speaking-pulse { animation: speakPulse .6s ease; }
+
+    /* buttons row */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      max-width: 340px;
+    }
+    .action-btn {
+      flex: 1;
+      height: 64px;
+      border-radius: 20px;
+      border: none;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.05rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform .12s, box-shadow .12s;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+    }
+    .action-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.12); }
+
+    .btn-name  { background: linear-gradient(135deg,#FFD93D,#FFB347); color: #333; box-shadow: 0 4px 0 #CC8C1A; }
+    .btn-sound { background: linear-gradient(135deg,#6BCB77,#3EC9A7); color: white; box-shadow: 0 4px 0 #1E9960; }
+
+    @keyframes btnBounce {
+      0%,100% { transform: scale(1); }
+      30%      { transform: scale(1.07); }
+      60%      { transform: scale(0.96); }
+    }
+    .action-btn.active-anim { animation: btnBounce .45s ease; }
+
+    /* nav */
+    .flash-nav {
+      display: flex;
+      gap: 16px;
+      width: 100%;
+      max-width: 340px;
+    }
+    .nav-btn {
+      flex: 1;
+      height: 58px;
+      border-radius: 18px;
+      border: none;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform .12s, box-shadow .12s;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.10);
+    }
+    .nav-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.10); }
+    .btn-prev { background: #EEE; color: #666; }
+    .btn-next { background: #5BA4F5; color: white; box-shadow: 0 4px 0 #2A6FCC; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <a class="header-back" href="index.html">🏠</a>
+    <span class="header-title">🐾 Animals</span>
+    <span class="header-star">🌟</span>
+  </header>
+
+  <!-- TABS -->
+  <nav class="tabs">
+    <button class="tab-btn active" id="tab1-btn" onclick="switchTab(1)">🗂️ All Animals</button>
+    <button class="tab-btn"        id="tab2-btn" onclick="switchTab(2)">🃏 Flashcard</button>
+  </nav>
+
+  <!-- TAB 1 — GRID -->
+  <div class="panel active grid-panel" id="panel1">
+    <p class="grid-intro">TAP TO HEAR THE NAME &amp; SOUND! 🔊</p>
+    <div class="animal-grid" id="animalGrid"></div>
+  </div>
+
+  <!-- TAB 2 — FLASHCARD -->
+  <div class="panel flash-panel" id="panel2">
+    <div class="progress-wrap">
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:3.3%"></div>
+      </div>
+      <div class="progress-label" id="progressLabel">1 / 30</div>
+    </div>
+
+    <div class="flash-card" id="flashCard" onclick="speakName()">
+      <div class="fc-emoji"        id="fcEmoji">🐶</div>
+      <div class="fc-name"         id="fcName">Dog</div>
+      <div class="fc-sound-label"  id="fcSound">"Woof woof!"</div>
+      <div class="tap-hint">👆 tap card · hear name</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="action-btn btn-name"  id="btnName"  onclick="speakName()">🔊 Name</button>
+      <button class="action-btn btn-sound" id="btnSound" onclick="speakSound()">🐾 Sound</button>
+    </div>
+
+    <div class="flash-nav">
+      <button class="nav-btn btn-prev" onclick="prevAnimal()">◀ Back</button>
+      <button class="nav-btn btn-next" onclick="nextAnimal()">Next ▶</button>
+    </div>
+  </div>
+
+  <script>
+    /* ═══════════════════════════════════
+       DATA — 30 animals
+    ═══════════════════════════════════ */
+    const ANIMALS = [
+      { name:'Dog',        emoji:'🐶', sound:'Woof woof!',        color:['#FF8E53','#D4541A'] },
+      { name:'Cat',        emoji:'🐱', sound:'Meow!',             color:['#C77DFF','#8A30CC'] },
+      { name:'Cow',        emoji:'🐮', sound:'Mooo!',             color:['#6DD5FA','#1A9ED4'] },
+      { name:'Pig',        emoji:'🐷', sound:'Oink oink!',        color:['#F76BB7','#C41A7A'] },
+      { name:'Duck',       emoji:'🦆', sound:'Quack quack!',      color:['#FFD93D','#E6B800'] },
+      { name:'Frog',       emoji:'🐸', sound:'Ribbit ribbit!',    color:['#6BCB77','#2E9E50'] },
+      { name:'Lion',       emoji:'🦁', sound:'Roar!',             color:['#FFB347','#E0922A'] },
+      { name:'Elephant',   emoji:'🐘', sound:'Pawoo!',            color:['#5BA4F5','#1A5FCC'] },
+      { name:'Monkey',     emoji:'🐒', sound:'Ooh ooh ah ah!',    color:['#C8E63C','#96AA10'] },
+      { name:'Bear',       emoji:'🐻', sound:'Growl!',            color:['#FF6B6B','#D63031'] },
+      { name:'Rabbit',     emoji:'🐰', sound:'Squeak!',           color:['#FFD93D','#CC9B00'] },
+      { name:'Horse',      emoji:'🐴', sound:'Neigh!',            color:['#3EC9A7','#1A9E80'] },
+      { name:'Sheep',      emoji:'🐑', sound:'Baa baa!',          color:['#AEE6FF','#5BA4F5'] },
+      { name:'Chicken',    emoji:'🐔', sound:'Cluck cluck!',      color:['#FFB347','#CC6600'] },
+      { name:'Bird',       emoji:'🐦', sound:'Tweet tweet!',      color:['#6DD5FA','#0077B6'] },
+      { name:'Fish',       emoji:'🐟', sound:'Blub blub!',        color:['#5BA4F5','#023E8A'] },
+      { name:'Snake',      emoji:'🐍', sound:'Hisss!',            color:['#6BCB77','#1B4332'] },
+      { name:'Tiger',      emoji:'🐯', sound:'Roar!',             color:['#FF8E53','#923B00'] },
+      { name:'Penguin',    emoji:'🐧', sound:'Squawk!',           color:['#3EC9D6','#007B8A'] },
+      { name:'Giraffe',    emoji:'🦒', sound:'Hum hum!',          color:['#FFD93D','#996600'] },
+      { name:'Zebra',      emoji:'🦓', sound:'Bark!',             color:['#ADB5BD','#495057'] },
+      { name:'Crocodile',  emoji:'🐊', sound:'Snap snap!',        color:['#6BCB77','#1B4332'] },
+      { name:'Owl',        emoji:'🦉', sound:'Hoo hoo!',          color:['#C77DFF','#5A189A'] },
+      { name:'Bee',        emoji:'🐝', sound:'Bzzzz!',            color:['#FFD93D','#FF6B00'] },
+      { name:'Butterfly',  emoji:'🦋', sound:'Flutter!',          color:['#F76BB7','#7B2FBE'] },
+      { name:'Crab',       emoji:'🦀', sound:'Click click!',      color:['#FF6B6B','#900000'] },
+      { name:'Whale',      emoji:'🐋', sound:'Whooooo!',          color:['#6DD5FA','#023E8A'] },
+      { name:'Wolf',       emoji:'🐺', sound:'Awoooo!',           color:['#ADB5BD','#343A40'] },
+      { name:'Fox',        emoji:'🦊', sound:'Yip yip!',          color:['#FF8E53','#7D2D00'] },
+      { name:'Panda',      emoji:'🐼', sound:'Bleat!',            color:['#DEE2E6','#495057'] },
+    ];
+
+    let currentIndex = 0;
+
+    /* ═══════════════════════════════════
+       SPEECH
+    ═══════════════════════════════════ */
+    function speak(text, rate = 0.82, pitch = 1.1) {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang  = 'en-US';
+      u.rate  = rate;
+      u.pitch = pitch;
+      window.speechSynthesis.speak(u);
+    }
+
+    function speakName() {
+      const a = ANIMALS[currentIndex];
+      speak(a.name, 0.78, 1.2);
+      pulseCard();
+      animBtn('btnName');
+    }
+
+    function speakSound() {
+      const a = ANIMALS[currentIndex];
+      speak(a.sound, 0.85, 1.35);
+      animBtn('btnSound');
+    }
+
+    function pulseCard() {
+      const c = document.getElementById('flashCard');
+      c.classList.remove('speaking-pulse');
+      void c.offsetWidth;
+      c.classList.add('speaking-pulse');
+      setTimeout(() => c.classList.remove('speaking-pulse'), 700);
+    }
+
+    function animBtn(id) {
+      const b = document.getElementById(id);
+      b.classList.remove('active-anim');
+      void b.offsetWidth;
+      b.classList.add('active-anim');
+      setTimeout(() => b.classList.remove('active-anim'), 500);
+    }
+
+    /* ═══════════════════════════════════
+       TAB 1 — BUILD GRID
+    ═══════════════════════════════════ */
+    function buildGrid() {
+      const grid = document.getElementById('animalGrid');
+      ANIMALS.forEach((a, i) => {
+        const tile = document.createElement('button');
+        tile.className = 'animal-tile';
+        tile.style.background = `linear-gradient(145deg, ${a.color[0]}, ${a.color[1]})`;
+        tile.innerHTML = `
+          <span class="tile-emoji-big">${a.emoji}</span>
+          <span class="tile-name">${a.name}</span>
+          <span class="tile-sound">${a.sound}</span>
+        `;
+        tile.addEventListener('click', () => {
+          // speak name then sound
+          speak(a.name + '! ' + a.sound, 0.82, 1.2);
+          tile.classList.remove('speaking');
+          void tile.offsetWidth;
+          tile.classList.add('speaking');
+          setTimeout(() => tile.classList.remove('speaking'), 600);
+          // sync flashcard index
+          currentIndex = i;
+        });
+        grid.appendChild(tile);
+      });
+    }
+
+    /* ═══════════════════════════════════
+       TAB 2 — FLASHCARD
+    ═══════════════════════════════════ */
+    function updateFlashCard(animate = true) {
+      const a = ANIMALS[currentIndex];
+      document.getElementById('fcEmoji').textContent = a.emoji;
+      document.getElementById('fcName').textContent  = a.name;
+      document.getElementById('fcSound').textContent = `"${a.sound}"`;
+
+      const card = document.getElementById('flashCard');
+      card.style.background = `linear-gradient(145deg, ${a.color[0]} 0%, ${a.color[1]} 100%)`;
+
+      // progress
+      const pct = ((currentIndex + 1) / ANIMALS.length * 100).toFixed(1);
+      document.getElementById('progressFill').style.width  = pct + '%';
+      document.getElementById('progressLabel').textContent = `${currentIndex + 1} / ${ANIMALS.length}`;
+
+      if (animate) {
+        card.classList.remove('flip');
+        void card.offsetWidth;
+        card.classList.add('flip');
+      }
+    }
+
+    function nextAnimal() {
+      currentIndex = (currentIndex + 1) % ANIMALS.length;
+      updateFlashCard();
+      setTimeout(speakName, 350);
+    }
+
+    function prevAnimal() {
+      currentIndex = (currentIndex - 1 + ANIMALS.length) % ANIMALS.length;
+      updateFlashCard();
+      setTimeout(speakName, 350);
+    }
+
+    /* ═══════════════════════════════════
+       TAB SWITCH
+    ═══════════════════════════════════ */
+    function switchTab(n) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`panel${n}`).classList.add('active');
+      document.getElementById(`tab${n}-btn`).classList.add('active');
+      if (n === 2) {
+        updateFlashCard(false);
+        setTimeout(speakName, 400);
+      }
+    }
+
+    /* ═══════════════════════════════════
+       INIT
+    ═══════════════════════════════════ */
+    buildGrid();
+    updateFlashCard(false);
+  </script>
+</body>
+</html>
