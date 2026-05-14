@@ -1,348 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
   <title>🐾 Animals · Baby English</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --bg: #FFFDF7;
-      --dark: #2B2B2B;
-      --tab-h: 64px;
-      --header-h: 64px;
-    }
+    :root { --bg:#FFFDF7; --dark:#2B2B2B; --header-h:64px; --tab-h:60px; }
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--bg);
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      overflow-x: hidden;
-    }
+    body { font-family:'Nunito',sans-serif; background:var(--bg); min-height:100vh; display:flex; flex-direction:column; overflow-x:hidden; }
 
     /* HEADER */
-    .header {
-      height: var(--header-h);
-      background: linear-gradient(135deg, #D4FFD4, #AEFFD4);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 16px;
-      position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    }
-    .header-back { text-decoration:none; font-size:26px; line-height:1; }
+    .header { height:var(--header-h); background:linear-gradient(135deg,#D4FFD4,#AEFFD4); display:flex; align-items:center; justify-content:space-between; padding:0 16px; position:sticky; top:0; z-index:100; box-shadow:0 2px 14px rgba(0,0,0,.10); }
+    .back-btn { text-decoration:none; display:flex; align-items:center; gap:6px; background:white; border-radius:14px; padding:7px 14px 7px 10px; font-family:'Fredoka One',cursive; font-size:1rem; color:var(--dark); box-shadow:0 2px 8px rgba(0,0,0,.12); }
     .header-title { font-family:'Fredoka One',cursive; font-size:1.5rem; color:var(--dark); }
-    .header-star  { font-size:26px; }
 
     /* TABS */
-    .tabs {
-      display:flex; background:#fff;
-      border-bottom:3px solid #EEE;
-      position:sticky; top:var(--header-h); z-index:99;
-    }
-    .tab-btn {
-      flex:1; height:var(--tab-h); border:none; background:transparent;
-      font-family:'Fredoka One',cursive; font-size:1.05rem; color:#AAA;
-      cursor:pointer; border-bottom:4px solid transparent;
-      display:flex; align-items:center; justify-content:center; gap:8px;
-      transition: color .2s, border-bottom .2s;
-    }
+    .tabs { display:flex; background:#fff; border-bottom:3px solid #EEE; position:sticky; top:var(--header-h); z-index:99; }
+    .tab-btn { flex:1; height:var(--tab-h); border:none; background:transparent; font-family:'Fredoka One',cursive; font-size:1.05rem; color:#AAA; cursor:pointer; border-bottom:4px solid transparent; display:flex; align-items:center; justify-content:center; gap:8px; transition:color .2s, border-bottom .2s; }
     .tab-btn.active { color:var(--dark); border-bottom:4px solid #6BCB77; }
 
+    /* PANELS — key: only one visible at a time */
     .panel { display:none; }
     .panel.active { display:block; }
 
-    /* TAB 1 — GRID 2 cols, big tiles */
-    .grid-panel { padding: 16px 14px 40px; }
-    .grid-intro {
-      text-align:center; font-size:0.88rem; color:#999;
-      font-weight:700; margin-bottom:14px; letter-spacing:0.5px;
-    }
-    .animal-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      max-width: 480px;
-      margin: 0 auto;
-    }
-    .animal-tile {
-      border-radius: 26px;
-      padding: 22px 12px 18px;
-      display: flex; flex-direction: column;
-      align-items: center; gap: 10px;
-      cursor: pointer; border: none;
-      user-select: none; -webkit-tap-highlight-color: transparent;
-      box-shadow: 0 6px 0 rgba(0,0,0,0.13), 0 10px 24px rgba(0,0,0,0.08);
-      transition: transform .12s, box-shadow .12s;
-    }
-    .animal-tile:active {
-      transform: translateY(5px) scale(0.96);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.13), 0 4px 12px rgba(0,0,0,0.08);
-    }
-    .tile-emoji-big {
-      font-size: 3.8rem;
-      line-height: 1;
-      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15));
-    }
-    .tile-name {
-      font-family: 'Fredoka One', cursive;
-      font-size: 1.3rem;
-      color: white;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
+    /* ══ TAB 1 — SCROLL LIST ══ */
+    #panel1 { padding:16px 16px 48px; }
 
-    @keyframes pop {
-      0%   { transform: scale(1); }
-      35%  { transform: scale(1.14) rotate(-4deg); }
-      65%  { transform: scale(0.94) rotate(3deg); }
-      100% { transform: scale(1); }
+    .animal-card {
+      display: block;
+      width: 100%;
+      min-height: 260px;          /* <-- fixed minimum height */
+      border-radius: 28px;
+      margin-bottom: 16px;
+      padding: 28px 16px 24px;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 6px 0 rgba(0,0,0,.14), 0 10px 28px rgba(0,0,0,.10);
+      transition: transform .13s, box-shadow .13s;
+      -webkit-tap-highlight-color: transparent;
+      /* flex layout inside card */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
-    .animal-tile.speaking { animation: pop .5s ease; }
+    .animal-card::before { content:''; position:absolute; top:-28%; left:-18%; width:56%; height:56%; background:radial-gradient(circle,rgba(255,255,255,.22) 0%,transparent 70%); pointer-events:none; }
+    .animal-card:active { transform:translateY(4px) scale(.97); box-shadow:0 2px 0 rgba(0,0,0,.14), 0 4px 10px rgba(0,0,0,.10); }
 
-    /* TAB 2 — FLASHCARD */
-    .flash-panel {
-      padding: 16px 20px 40px;
-      display:flex; flex-direction:column; align-items:center; gap:16px;
-    }
-    .progress-wrap { width:100%; max-width:400px; }
+    .ac-emoji { font-size:5.5rem; line-height:1; filter:drop-shadow(0 6px 10px rgba(0,0,0,.18)); }
+    .ac-name  { font-family:'Fredoka One',cursive; font-size:2.4rem; color:white; text-shadow:0 3px 8px rgba(0,0,0,.22); }
+    .ac-sound { font-family:'Fredoka One',cursive; font-size:1.15rem; color:rgba(255,255,255,.82); font-style:italic; }
+    .ac-hint  { font-size:.76rem; color:rgba(255,255,255,.48); font-weight:700; letter-spacing:.5px; margin-top:4px; }
+
+    @keyframes popCard { 0%{transform:scale(1);} 35%{transform:scale(1.03) rotate(-1deg);} 65%{transform:scale(.98);} 100%{transform:scale(1);} }
+    .animal-card.pop { animation:popCard .45s ease; }
+
+    /* ══ TAB 2 — FLASHCARD ══ */
+    #panel2 { display:none; flex-direction:column; min-height:calc(100vh - var(--header-h) - var(--tab-h)); }
+    #panel2.active { display:flex; }
+
+    .progress-wrap { padding:14px 20px 0; flex-shrink:0; }
     .progress-track { height:10px; background:#EEE; border-radius:10px; overflow:hidden; }
-    .progress-fill  {
-      height:100%; border-radius:10px;
-      background: linear-gradient(90deg,#6BCB77,#3EC9A7);
-      transition:width .4s ease;
-    }
-    .progress-label { text-align:right; font-family:'Fredoka One',cursive; font-size:0.9rem; color:#BBB; margin-top:4px; }
+    .progress-fill  { height:100%; border-radius:10px; background:linear-gradient(90deg,#6BCB77,#3EC9A7); transition:width .4s ease; }
+    .progress-label { text-align:right; font-family:'Fredoka One',cursive; font-size:.88rem; color:#BBB; margin-top:4px; }
+
+    /* side nav + card row */
+    .flash-row { flex:1; display:flex; align-items:center; padding:12px 0; min-height:0; }
+
+    .side-btn { flex-shrink:0; width:58px; height:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; -webkit-tap-highlight-color:transparent; transition:opacity .15s, transform .12s; }
+    .side-btn:active { opacity:.45; transform:scale(.88); }
+    .side-pill { width:44px; height:88px; background:white; border-radius:16px; box-shadow:0 4px 0 rgba(0,0,0,.10), 0 6px 16px rgba(0,0,0,.07); display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
 
     .flash-card {
-      width:100%; max-width:340px;
-      border-radius:40px;
-      display:flex; flex-direction:column;
-      align-items:center; justify-content:center;
-      padding: 36px 24px 28px;
-      gap: 10px;
-      min-height: 360px;
-      box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 20px 50px rgba(0,0,0,0.12);
-      position:relative; overflow:hidden;
-      cursor:pointer; user-select:none;
+      flex:1;
+      margin:0 6px;
+      border-radius:32px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:24px 16px;
+      box-shadow:0 8px 0 rgba(0,0,0,.13), 0 18px 48px rgba(0,0,0,.12);
+      position:relative;
+      overflow:hidden;
+      cursor:pointer;
       -webkit-tap-highlight-color:transparent;
-      transition: background .4s;
+      transition:background .4s;
+      /* make it tall but not overflow */
+      min-height:320px;
+      max-height:480px;
     }
-    .flash-card::before {
-      content:'';
-      position:absolute; top:-25%; left:-15%;
-      width:55%; height:55%;
-      background: radial-gradient(circle, rgba(255,255,255,0.32) 0%, transparent 70%);
-      pointer-events:none;
-    }
+    .flash-card::before { content:''; position:absolute; top:-25%; left:-15%; width:55%; height:55%; background:radial-gradient(circle,rgba(255,255,255,.26) 0%,transparent 70%); pointer-events:none; }
 
-    .fc-emoji {
-      font-size: 7rem;
-      line-height: 1;
-      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.18));
-      animation: floatAnimal 3s ease-in-out infinite;
-    }
-    @keyframes floatAnimal {
-      0%,100% { transform: translateY(0) rotate(-2deg); }
-      50%      { transform: translateY(-12px) rotate(2deg); }
-    }
-    .fc-name {
-      font-family: 'Fredoka One', cursive;
-      font-size: 2.8rem;
-      color: white;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      line-height: 1;
-      margin-top: 8px;
-    }
-    .tap-hint {
-      position:absolute; bottom:14px;
-      font-size:0.78rem; color:rgba(255,255,255,0.55);
-      font-weight:700; letter-spacing:0.5px;
-    }
+    .fc-emoji { font-size:6rem; line-height:1; filter:drop-shadow(0 6px 12px rgba(0,0,0,.18)); animation:float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-10px) rotate(2deg);} }
+    .fc-name  { font-family:'Fredoka One',cursive; font-size:2.6rem; color:white; text-shadow:0 4px 10px rgba(0,0,0,.20); line-height:1; }
+    .fc-sound { font-family:'Fredoka One',cursive; font-size:1.1rem; color:rgba(255,255,255,.80); font-style:italic; }
+    .fc-hint  { position:absolute; bottom:14px; font-size:.74rem; color:rgba(255,255,255,.42); font-weight:700; letter-spacing:.5px; }
 
-    @keyframes flipIn {
-      0%   { transform: rotateY(90deg) scale(0.8); opacity:0; }
-      100% { transform: rotateY(0)     scale(1);   opacity:1; }
-    }
-    .flash-card.flip { animation: flipIn .35s ease-out; }
+    @keyframes flipIn { 0%{transform:rotateY(90deg) scale(.85);opacity:0;} 100%{transform:rotateY(0) scale(1);opacity:1;} }
+    .flash-card.flip { animation:flipIn .33s ease-out; }
+    @keyframes pulse { 0%,100%{box-shadow:0 8px 0 rgba(0,0,0,.13),0 18px 48px rgba(0,0,0,.12);} 50%{box-shadow:0 8px 0 rgba(0,0,0,.13),0 18px 56px rgba(0,0,0,.20),0 0 0 12px rgba(255,255,255,.26);} }
+    .flash-card.pulse { animation:pulse .55s ease; }
 
-    @keyframes speakPulse {
-      0%,100% { box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 20px 50px rgba(0,0,0,0.12); }
-      50%      { box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 20px 60px rgba(0,0,0,0.2), 0 0 0 14px rgba(255,255,255,0.28); }
-    }
-    .flash-card.speaking-pulse { animation: speakPulse .6s ease; }
-
-    .speak-btn {
-      width:100%; max-width:340px; height:68px;
-      border-radius:22px; border:none;
-      background: linear-gradient(135deg,#6BCB77,#3EC9A7);
-      font-family:'Fredoka One',cursive; font-size:1.35rem;
-      color:white; cursor:pointer;
-      display:flex; align-items:center; justify-content:center; gap:10px;
-      box-shadow: 0 5px 0 #1E9960, 0 8px 24px rgba(60,200,130,0.3);
-      transition: transform .12s, box-shadow .12s;
-    }
-    .speak-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #1E9960; }
-    @keyframes btnBounce {
-      0%,100% { transform:scale(1); }
-      30%      { transform:scale(1.07); }
-      60%      { transform:scale(0.96); }
-    }
-    .speak-btn.active-anim { animation: btnBounce .45s ease; }
-
-    .flash-nav { display:flex; gap:16px; width:100%; max-width:340px; }
-    .nav-btn {
-      flex:1; height:58px; border-radius:18px; border:none;
-      font-family:'Fredoka One',cursive; font-size:1rem;
-      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
-      box-shadow:0 4px 0 rgba(0,0,0,0.10);
-      transition: transform .12s, box-shadow .12s;
-    }
-    .nav-btn:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,0.10); }
-    .btn-prev { background:#EEE; color:#666; }
-    .btn-next { background:#5BA4F5; color:white; box-shadow:0 4px 0 #2A6FCC; }
+    .listen-wrap { padding:0 20px 20px; flex-shrink:0; }
+    .listen-btn { width:100%; height:64px; border-radius:20px; border:none; background:linear-gradient(135deg,#6BCB77,#3EC9A7); font-family:'Fredoka One',cursive; font-size:1.3rem; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 5px 0 #1A8C50, 0 8px 20px rgba(60,200,130,.28); transition:transform .12s, box-shadow .12s; }
+    .listen-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #1A8C50; }
+    @keyframes btnPop { 0%,100%{transform:scale(1);} 30%{transform:scale(1.06);} 60%{transform:scale(.97);} }
+    .listen-btn.pop { animation:btnPop .4s ease; }
   </style>
 </head>
 <body>
 
-  <header class="header">
-    <a class="header-back" href="index.html">&#127968;</a>
-    <span class="header-title">&#128062; Animals</span>
-    <span class="header-star">&#127775;</span>
-  </header>
+<header class="header">
+  <a class="back-btn" href="index.html">🏠 Home</a>
+  <span class="header-title">🐾 Animals</span>
+  <span style="font-size:26px">🌟</span>
+</header>
 
-  <nav class="tabs">
-    <button class="tab-btn active" id="tab1-btn" onclick="switchTab(1)">&#128193; All Animals</button>
-    <button class="tab-btn"        id="tab2-btn" onclick="switchTab(2)">&#127183; Flashcard</button>
-  </nav>
+<nav class="tabs">
+  <button class="tab-btn active" id="tab1-btn" onclick="switchTab(1)">🗂️ All Animals</button>
+  <button class="tab-btn"        id="tab2-btn" onclick="switchTab(2)">🃏 Flashcard</button>
+</nav>
 
-  <div class="panel active grid-panel" id="panel1">
-    <p class="grid-intro">TAP AN ANIMAL TO HEAR IT! &#128266;</p>
-    <div class="animal-grid" id="animalGrid"></div>
+<!-- TAB 1 -->
+<div class="panel active" id="panel1">
+  <!-- cards built by JS -->
+</div>
+
+<!-- TAB 2 -->
+<div class="panel" id="panel2">
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="pFill" style="width:3.3%"></div></div>
+    <div class="progress-label" id="pLabel">1 / 30</div>
   </div>
-
-  <div class="panel flash-panel" id="panel2">
-    <div class="progress-wrap">
-      <div class="progress-track">
-        <div class="progress-fill" id="progressFill" style="width:3.3%"></div>
-      </div>
-      <div class="progress-label" id="progressLabel">1 / 30</div>
+  <div class="flash-row">
+    <button class="side-btn" onclick="go(-1)"><div class="side-pill">◀</div></button>
+    <div class="flash-card" id="fCard" onclick="speakCurrent()">
+      <div class="fc-emoji" id="fEmoji">🐶</div>
+      <div class="fc-name"  id="fName">Dog</div>
+      <div class="fc-sound" id="fSound">"Woof woof!"</div>
+      <div class="fc-hint">👆 tap to hear</div>
     </div>
-    <div class="flash-card" id="flashCard" onclick="speakCurrent()">
-      <div class="fc-emoji" id="fcEmoji">&#128054;</div>
-      <div class="fc-name"  id="fcName">Dog</div>
-      <div class="tap-hint">&#128070; tap to hear</div>
-    </div>
-    <button class="speak-btn" id="speakBtn" onclick="speakCurrent()">&#128266; Listen</button>
-    <div class="flash-nav">
-      <button class="nav-btn btn-prev" onclick="prevAnimal()">&#9664; Back</button>
-      <button class="nav-btn btn-next" onclick="nextAnimal()">Next &#9654;</button>
-    </div>
+    <button class="side-btn" onclick="go(1)"><div class="side-pill">▶</div></button>
   </div>
+  <div class="listen-wrap">
+    <button class="listen-btn" id="listenBtn" onclick="speakCurrent()">🔊 Listen</button>
+  </div>
+</div>
 
-  <script>
-    const ANIMALS = [
-      { name:'Dog',       emoji:'\uD83D\uDC36', color:['#FF8E53','#D4541A'] },
-      { name:'Cat',       emoji:'\uD83D\uDC31', color:['#C77DFF','#8A30CC'] },
-      { name:'Cow',       emoji:'\uD83D\uDC2E', color:['#6DD5FA','#1A9ED4'] },
-      { name:'Pig',       emoji:'\uD83D\uDC37', color:['#F76BB7','#C41A7A'] },
-      { name:'Duck',      emoji:'\uD83E\uDD86', color:['#FFD93D','#CC8800'] },
-      { name:'Frog',      emoji:'\uD83D\uDC38', color:['#6BCB77','#2E9E50'] },
-      { name:'Lion',      emoji:'\uD83E\uDD81', color:['#FFB347','#E0922A'] },
-      { name:'Elephant',  emoji:'\uD83D\uDC18', color:['#5BA4F5','#1A5FCC'] },
-      { name:'Monkey',    emoji:'\uD83D\uDC12', color:['#C8E63C','#7A9900'] },
-      { name:'Bear',      emoji:'\uD83D\uDC3B', color:['#FF6B6B','#C0392B'] },
-      { name:'Rabbit',    emoji:'\uD83D\uDC30', color:['#FFD93D','#CC9B00'] },
-      { name:'Horse',     emoji:'\uD83D\uDC34', color:['#3EC9A7','#1A9E80'] },
-      { name:'Sheep',     emoji:'\uD83D\uDC11', color:['#AEE6FF','#5BA4F5'] },
-      { name:'Chicken',   emoji:'\uD83D\uDC14', color:['#FFB347','#CC6600'] },
-      { name:'Bird',      emoji:'\uD83D\uDC26', color:['#6DD5FA','#0077B6'] },
-      { name:'Fish',      emoji:'\uD83D\uDC1F', color:['#5BA4F5','#023E8A'] },
-      { name:'Snake',     emoji:'\uD83D\uDC0D', color:['#6BCB77','#1B4332'] },
-      { name:'Tiger',     emoji:'\uD83D\uDC2F', color:['#FF8E53','#923B00'] },
-      { name:'Penguin',   emoji:'\uD83D\uDC27', color:['#3EC9D6','#007B8A'] },
-      { name:'Giraffe',   emoji:'\uD83E\uDD92', color:['#FFD93D','#996600'] },
-      { name:'Zebra',     emoji:'\uD83E\uDD93', color:['#ADB5BD','#495057'] },
-      { name:'Crocodile', emoji:'\uD83D\uDC0A', color:['#6BCB77','#1B4332'] },
-      { name:'Owl',       emoji:'\uD83E\uDD89', color:['#C77DFF','#5A189A'] },
-      { name:'Bee',       emoji:'\uD83D\uDC1D', color:['#FFD93D','#FF6B00'] },
-      { name:'Butterfly', emoji:'\uD83E\uDD8B', color:['#F76BB7','#7B2FBE'] },
-      { name:'Crab',      emoji:'\uD83E\uDD80', color:['#FF6B6B','#900000'] },
-      { name:'Whale',     emoji:'\uD83D\uDC0B', color:['#6DD5FA','#023E8A'] },
-      { name:'Wolf',      emoji:'\uD83D\uDC3A', color:['#ADB5BD','#343A40'] },
-      { name:'Fox',       emoji:'\uD83E\uDD8A', color:['#FF8E53','#7D2D00'] },
-      { name:'Panda',     emoji:'\uD83D\uDC3C', color:['#ADB5BD','#495057'] },
-    ];
+<script>
+  var ANIMALS = [
+    {name:'Dog',       emoji:'🐶', sound:'Woof woof!',     c:['#FF8E53','#D4541A']},
+    {name:'Cat',       emoji:'🐱', sound:'Meow!',           c:['#C77DFF','#8A30CC']},
+    {name:'Cow',       emoji:'🐮', sound:'Mooo!',           c:['#6DD5FA','#1A9ED4']},
+    {name:'Pig',       emoji:'🐷', sound:'Oink oink!',      c:['#F76BB7','#C41A7A']},
+    {name:'Duck',      emoji:'🦆', sound:'Quack quack!',    c:['#FFD93D','#CC8800']},
+    {name:'Frog',      emoji:'🐸', sound:'Ribbit ribbit!',  c:['#6BCB77','#2E9E50']},
+    {name:'Lion',      emoji:'🦁', sound:'Roar!',           c:['#FFB347','#E0922A']},
+    {name:'Elephant',  emoji:'🐘', sound:'Pawoo!',          c:['#5BA4F5','#1A5FCC']},
+    {name:'Monkey',    emoji:'🐒', sound:'Ooh ooh ah ah!',  c:['#C8E63C','#7A9900']},
+    {name:'Bear',      emoji:'🐻', sound:'Growl!',          c:['#FF6B6B','#C0392B']},
+    {name:'Rabbit',    emoji:'🐰', sound:'Squeak!',         c:['#FFD93D','#CC9B00']},
+    {name:'Horse',     emoji:'🐴', sound:'Neigh!',          c:['#3EC9A7','#1A9E80']},
+    {name:'Sheep',     emoji:'🐑', sound:'Baa baa!',        c:['#AEE6FF','#5BA4F5']},
+    {name:'Chicken',   emoji:'🐔', sound:'Cluck cluck!',    c:['#FFB347','#CC6600']},
+    {name:'Bird',      emoji:'🐦', sound:'Tweet tweet!',    c:['#6DD5FA','#0077B6']},
+    {name:'Fish',      emoji:'🐟', sound:'Blub blub!',      c:['#5BA4F5','#023E8A']},
+    {name:'Snake',     emoji:'🐍', sound:'Hisss!',          c:['#6BCB77','#1B4332']},
+    {name:'Tiger',     emoji:'🐯', sound:'Roar!',           c:['#FF8E53','#923B00']},
+    {name:'Penguin',   emoji:'🐧', sound:'Squawk!',         c:['#3EC9D6','#007B8A']},
+    {name:'Giraffe',   emoji:'🦒', sound:'Hum hum!',        c:['#FFD93D','#996600']},
+    {name:'Zebra',     emoji:'🦓', sound:'Bark!',           c:['#ADB5BD','#495057']},
+    {name:'Crocodile', emoji:'🐊', sound:'Snap snap!',      c:['#6BCB77','#1B4332']},
+    {name:'Owl',       emoji:'🦉', sound:'Hoo hoo!',        c:['#C77DFF','#5A189A']},
+    {name:'Bee',       emoji:'🐝', sound:'Bzzzz!',          c:['#FFD93D','#FF6B00']},
+    {name:'Butterfly', emoji:'🦋', sound:'Flutter!',        c:['#F76BB7','#7B2FBE']},
+    {name:'Crab',      emoji:'🦀', sound:'Click click!',    c:['#FF6B6B','#900000']},
+    {name:'Whale',     emoji:'🐋', sound:'Whooooo!',        c:['#6DD5FA','#023E8A']},
+    {name:'Wolf',      emoji:'🐺', sound:'Awoooo!',         c:['#ADB5BD','#343A40']},
+    {name:'Fox',       emoji:'🦊', sound:'Yip yip!',        c:['#FF8E53','#7D2D00']},
+    {name:'Panda',     emoji:'🐼', sound:'Bleat!',          c:['#ADB5BD','#495057']},
+  ];
 
-    let current = 0;
+  var cur = 0;
 
-    function speak(text) {
-      if (!window.speechSynthesis) return;
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US'; u.rate = 0.78; u.pitch = 1.2;
-      window.speechSynthesis.speak(u);
-    }
+  function speak(txt) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(txt);
+    u.lang = 'en-US'; u.rate = 0.82; u.pitch = 1.15;
+    window.speechSynthesis.speak(u);
+  }
 
-    function speakCurrent() {
-      speak(ANIMALS[current].name);
-      const card = document.getElementById('flashCard');
-      card.classList.remove('speaking-pulse'); void card.offsetWidth;
-      card.classList.add('speaking-pulse');
-      setTimeout(() => card.classList.remove('speaking-pulse'), 700);
-      const btn = document.getElementById('speakBtn');
-      btn.classList.remove('active-anim'); void btn.offsetWidth;
-      btn.classList.add('active-anim');
-      setTimeout(() => btn.classList.remove('active-anim'), 500);
-    }
+  function speakCurrent() {
+    var a = ANIMALS[cur];
+    speak(a.name + '! ' + a.sound);
+    var c = document.getElementById('fCard');
+    c.classList.remove('pulse'); void c.offsetWidth; c.classList.add('pulse');
+    setTimeout(function(){ c.classList.remove('pulse'); }, 600);
+    var b = document.getElementById('listenBtn');
+    b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+    setTimeout(function(){ b.classList.remove('pop'); }, 450);
+  }
 
-    function buildGrid() {
-      const grid = document.getElementById('animalGrid');
-      ANIMALS.forEach((a, i) => {
-        const tile = document.createElement('button');
-        tile.className = 'animal-tile';
-        tile.style.background = `linear-gradient(145deg, ${a.color[0]}, ${a.color[1]})`;
-        tile.innerHTML = `
-          <span class="tile-emoji-big">${a.emoji}</span>
-          <span class="tile-name">${a.name}</span>
-        `;
-        tile.addEventListener('click', () => {
-          speak(a.name);
-          tile.classList.remove('speaking'); void tile.offsetWidth;
-          tile.classList.add('speaking');
-          setTimeout(() => tile.classList.remove('speaking'), 600);
-          current = i;
-        });
-        grid.appendChild(tile);
+  /* Build Tab 1 scroll list */
+  function buildList() {
+    var panel = document.getElementById('panel1');
+    ANIMALS.forEach(function(a, i) {
+      var btn = document.createElement('button');
+      btn.className = 'animal-card';
+      btn.style.background = 'linear-gradient(150deg,' + a.c[0] + ',' + a.c[1] + ')';
+      btn.innerHTML =
+        '<span class="ac-emoji">' + a.emoji + '</span>' +
+        '<span class="ac-name">'  + a.name  + '</span>' +
+        '<span class="ac-sound">"' + a.sound + '"</span>' +
+        '<span class="ac-hint">👆 tap to hear</span>';
+      btn.addEventListener('click', function() {
+        speak(a.name + '! ' + a.sound);
+        btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
+        setTimeout(function(){ btn.classList.remove('pop'); }, 500);
+        cur = i;
       });
+      panel.appendChild(btn);
+    });
+  }
+
+  /* Update flashcard */
+  function updateCard(anim) {
+    var a = ANIMALS[cur];
+    document.getElementById('fEmoji').textContent = a.emoji;
+    document.getElementById('fName').textContent  = a.name;
+    document.getElementById('fSound').textContent = '"' + a.sound + '"';
+    document.getElementById('fCard').style.background = 'linear-gradient(150deg,' + a.c[0] + ',' + a.c[1] + ')';
+    var pct = ((cur + 1) / ANIMALS.length * 100).toFixed(1);
+    document.getElementById('pFill').style.width = pct + '%';
+    document.getElementById('pLabel').textContent = (cur + 1) + ' / ' + ANIMALS.length;
+    if (anim) {
+      var c = document.getElementById('fCard');
+      c.classList.remove('flip'); void c.offsetWidth; c.classList.add('flip');
     }
+  }
 
-    function updateCard(animate = true) {
-      const a = ANIMALS[current];
-      document.getElementById('fcEmoji').textContent = a.emoji;
-      document.getElementById('fcName').textContent  = a.name;
-      document.getElementById('flashCard').style.background = `linear-gradient(145deg, ${a.color[0]}, ${a.color[1]})`;
-      const pct = ((current + 1) / ANIMALS.length * 100).toFixed(1);
-      document.getElementById('progressFill').style.width      = pct + '%';
-      document.getElementById('progressLabel').textContent     = `${current + 1} / ${ANIMALS.length}`;
-      if (animate) {
-        const card = document.getElementById('flashCard');
-        card.classList.remove('flip'); void card.offsetWidth; card.classList.add('flip');
-      }
-    }
+  function go(dir) {
+    cur = (cur + dir + ANIMALS.length) % ANIMALS.length;
+    updateCard(true);
+    setTimeout(speakCurrent, 340);
+  }
 
-    function nextAnimal() { current = (current + 1) % ANIMALS.length; updateCard(); setTimeout(speakCurrent, 350); }
-    function prevAnimal() { current = (current - 1 + ANIMALS.length) % ANIMALS.length; updateCard(); setTimeout(speakCurrent, 350); }
+  /* Switch tabs */
+  function switchTab(n) {
+    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.getElementById('panel' + n).classList.add('active');
+    document.getElementById('tab' + n + '-btn').classList.add('active');
+    if (n === 2) { updateCard(false); setTimeout(speakCurrent, 420); }
+  }
 
-    function switchTab(n) {
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`panel${n}`).classList.add('active');
-      document.getElementById(`tab${n}-btn`).classList.add('active');
-      if (n === 2) { updateCard(false); setTimeout(speakCurrent, 400); }
-    }
-
-    buildGrid();
-    updateCard(false);
-  </script>
+  buildList();
+  updateCard(false);
+</script>
 </body>
 </html>

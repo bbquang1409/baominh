@@ -1,370 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
   <title>🔢 Numbers · Baby English</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --bg: #FFFDF7;
-      --dark: #2B2B2B;
-      --header-h: 64px;
-      --tab-h: 64px;
-    }
+    :root { --bg:#FFFDF7; --dark:#2B2B2B; --header-h:64px; --tab-h:60px; }
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--bg);
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      overflow-x: hidden;
-    }
-
-    /* HEADER */
-    .header {
-      height: var(--header-h);
-      background: linear-gradient(135deg, #FF6B6B22, #FFD93D33);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 16px;
-      position: sticky; top:0; z-index:100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    }
-    .header-back { text-decoration:none; font-size:26px; }
+    body { font-family:'Nunito',sans-serif; background:var(--bg); min-height:100vh; display:flex; flex-direction:column; overflow-x:hidden; }
+    .header { height:var(--header-h); background:linear-gradient(135deg,#FFE0E0,#FFCCCC); display:flex; align-items:center; justify-content:space-between; padding:0 16px; position:sticky; top:0; z-index:100; box-shadow:0 2px 14px rgba(0,0,0,.10); }
+    .back-btn { text-decoration:none; display:flex; align-items:center; gap:6px; background:white; border-radius:14px; padding:7px 14px 7px 10px; font-family:'Fredoka One',cursive; font-size:1rem; color:var(--dark); box-shadow:0 2px 8px rgba(0,0,0,.12); }
     .header-title { font-family:'Fredoka One',cursive; font-size:1.5rem; color:var(--dark); }
-    .header-star  { font-size:26px; }
-
-    /* TABS */
-    .tabs {
-      display:flex; background:#fff;
-      border-bottom:3px solid #EEE;
-      position:sticky; top:var(--header-h); z-index:99;
-    }
-    .tab-btn {
-      flex:1; height:var(--tab-h); border:none; background:transparent;
-      font-family:'Fredoka One',cursive; font-size:1.05rem; color:#AAA;
-      cursor:pointer; border-bottom:4px solid transparent;
-      display:flex; align-items:center; justify-content:center; gap:8px;
-      transition: color .2s, border-bottom .2s;
-    }
+    .tabs { display:flex; background:#fff; border-bottom:3px solid #EEE; position:sticky; top:var(--header-h); z-index:99; }
+    .tab-btn { flex:1; height:var(--tab-h); border:none; background:transparent; font-family:'Fredoka One',cursive; font-size:1.05rem; color:#AAA; cursor:pointer; border-bottom:4px solid transparent; display:flex; align-items:center; justify-content:center; gap:8px; transition:color .2s,border-bottom .2s; }
     .tab-btn.active { color:var(--dark); border-bottom:4px solid #FF6B6B; }
-
     .panel { display:none; }
     .panel.active { display:block; }
+    #panel2 { display:none; flex-direction:column; min-height:calc(100vh - var(--header-h) - var(--tab-h)); }
+    #panel2.active { display:flex; }
 
-    /* ══ TAB 1 — GRID ══ */
-    .grid-panel { padding:16px 14px 40px; }
-    .grid-intro {
-      text-align:center; font-size:0.88rem; color:#999;
-      font-weight:700; margin-bottom:14px; letter-spacing:0.5px;
-    }
-    .number-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      max-width: 480px;
-      margin: 0 auto;
-    }
-    .number-tile {
-      border-radius: 22px;
-      padding: 18px 8px 14px;
-      display: flex; flex-direction: column;
-      align-items: center; gap: 4px;
-      cursor: pointer; border: none;
-      user-select: none; -webkit-tap-highlight-color: transparent;
-      box-shadow: 0 5px 0 rgba(0,0,0,0.14), 0 8px 20px rgba(0,0,0,0.08);
-      transition: transform .12s, box-shadow .12s;
-    }
-    .number-tile:active {
-      transform: translateY(4px) scale(0.95);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.14), 0 4px 10px rgba(0,0,0,0.08);
-    }
-    .tile-numeral {
-      font-family: 'Fredoka One', cursive;
-      font-size: 2.6rem;
-      color: white;
-      text-shadow: 0 3px 6px rgba(0,0,0,0.2);
-      line-height: 1;
-    }
-    .tile-word {
-      font-family: 'Fredoka One', cursive;
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.9);
-    }
-    .tile-dots {
-      font-size: 1rem;
-      letter-spacing: 2px;
-      min-height: 22px;
-    }
+    #panel1 { padding:16px 16px 48px; }
+    .number-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; width:100%; min-height:300px; border-radius:28px; margin-bottom:16px; padding:32px 16px 28px; border:none; cursor:pointer; position:relative; overflow:hidden; box-shadow:0 6px 0 rgba(0,0,0,.14),0 10px 28px rgba(0,0,0,.10); transition:transform .13s,box-shadow .13s; -webkit-tap-highlight-color:transparent; }
+    .number-card::before { content:''; position:absolute; top:-28%; left:-18%; width:56%; height:56%; background:radial-gradient(circle,rgba(255,255,255,.22) 0%,transparent 70%); pointer-events:none; }
+    .number-card:active { transform:translateY(4px) scale(.97); box-shadow:0 2px 0 rgba(0,0,0,.14),0 4px 10px rgba(0,0,0,.10); }
+    .ac-numeral { font-family:'Fredoka One',cursive; font-size:7rem; color:white; text-shadow:0 6px 14px rgba(0,0,0,.22); line-height:1; animation:floatNum 3s ease-in-out infinite; }
+    @keyframes floatNum { 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-10px) scale(1.05);} }
+    .ac-word { font-family:'Fredoka One',cursive; font-size:2.6rem; color:rgba(255,255,255,.90); line-height:1; }
+    .ac-dots { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; max-width:260px; font-size:2rem; line-height:1.2; }
+    .ac-hint { font-size:.76rem; color:rgba(255,255,255,.48); font-weight:700; letter-spacing:.5px; margin-top:4px; }
+    @keyframes popCard { 0%{transform:scale(1);} 35%{transform:scale(1.03);} 65%{transform:scale(.98);} 100%{transform:scale(1);} }
+    .number-card.pop { animation:popCard .45s ease; }
 
-    @keyframes pop {
-      0%   { transform: scale(1); }
-      35%  { transform: scale(1.15) rotate(-4deg); }
-      65%  { transform: scale(0.93) rotate(3deg); }
-      100% { transform: scale(1); }
-    }
-    .number-tile.speaking { animation: pop .5s ease; }
-
-    /* ══ TAB 2 — FLASHCARD ══ */
-    .flash-panel {
-      padding: 16px 20px 40px;
-      display:flex; flex-direction:column; align-items:center; gap:16px;
-    }
-    .progress-wrap { width:100%; max-width:400px; }
+    .progress-wrap { padding:14px 20px 0; flex-shrink:0; }
     .progress-track { height:10px; background:#EEE; border-radius:10px; overflow:hidden; }
-    .progress-fill  { height:100%; border-radius:10px; transition:width .4s ease; background: linear-gradient(90deg,#FF6B6B,#FFB347); }
-    .progress-label { text-align:right; font-family:'Fredoka One',cursive; font-size:0.9rem; color:#BBB; margin-top:4px; }
-
-    .flash-card {
-      width:100%; max-width:340px;
-      border-radius:40px;
-      display:flex; flex-direction:column;
-      align-items:center; justify-content:center;
-      padding: 32px 24px 28px;
-      gap: 8px;
-      min-height: 360px;
-      box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 20px 50px rgba(0,0,0,0.12);
-      position:relative; overflow:hidden;
-      cursor:pointer; user-select:none;
-      -webkit-tap-highlight-color:transparent;
-      transition: background .4s;
-    }
-    .flash-card::before {
-      content:'';
-      position:absolute; top:-25%; left:-15%;
-      width:55%; height:55%;
-      background: radial-gradient(circle, rgba(255,255,255,0.32) 0%, transparent 70%);
-      pointer-events:none;
-    }
-
-    .fc-numeral {
-      font-family: 'Fredoka One', cursive;
-      font-size: 7rem;
-      color: white;
-      text-shadow: 0 6px 16px rgba(0,0,0,0.2);
-      line-height: 1;
-      animation: floatNum 2.8s ease-in-out infinite;
-    }
-    @keyframes floatNum {
-      0%,100% { transform: translateY(0) scale(1); }
-      50%      { transform: translateY(-10px) scale(1.04); }
-    }
-
-    .fc-word {
-      font-family: 'Fredoka One', cursive;
-      font-size: 2.2rem;
-      color: rgba(255,255,255,0.95);
-      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
-
-    /* dot counters */
-    .fc-dots {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-      max-width: 200px;
-      margin-top: 4px;
-    }
-    .dot-item {
-      font-size: 1.6rem;
-      animation: popDot .3s ease both;
-    }
-    @keyframes popDot {
-      0%   { transform: scale(0); opacity:0; }
-      70%  { transform: scale(1.2); opacity:1; }
-      100% { transform: scale(1); opacity:1; }
-    }
-
-    .tap-hint {
-      position:absolute; bottom:14px;
-      font-size:0.78rem; color:rgba(255,255,255,0.55);
-      font-weight:700; letter-spacing:0.5px;
-    }
-
-    @keyframes flipIn {
-      0%   { transform: rotateY(90deg) scale(0.8); opacity:0; }
-      100% { transform: rotateY(0)     scale(1);   opacity:1; }
-    }
-    .flash-card.flip { animation: flipIn .35s ease-out; }
-    @keyframes speakPulse {
-      0%,100% { box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 20px 50px rgba(0,0,0,0.12); }
-      50%      { box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 20px 60px rgba(0,0,0,0.2), 0 0 0 14px rgba(255,255,255,0.28); }
-    }
-    .flash-card.speaking-pulse { animation: speakPulse .6s ease; }
-
-    .speak-btn {
-      width:100%; max-width:340px; height:68px;
-      border-radius:22px; border:none;
-      background: linear-gradient(135deg,#FF6B6B,#FFB347);
-      font-family:'Fredoka One',cursive; font-size:1.35rem;
-      color:white; cursor:pointer;
-      display:flex; align-items:center; justify-content:center; gap:10px;
-      box-shadow: 0 5px 0 #C0392B, 0 8px 24px rgba(255,100,100,0.3);
-      transition: transform .12s, box-shadow .12s;
-    }
-    .speak-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #C0392B; }
-    @keyframes btnBounce {
-      0%,100% { transform:scale(1); }
-      30%      { transform:scale(1.07); }
-      60%      { transform:scale(0.96); }
-    }
-    .speak-btn.active-anim { animation: btnBounce .45s ease; }
-
-    .flash-nav { display:flex; gap:16px; width:100%; max-width:340px; }
-    .nav-btn {
-      flex:1; height:58px; border-radius:18px; border:none;
-      font-family:'Fredoka One',cursive; font-size:1rem;
-      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
-      box-shadow:0 4px 0 rgba(0,0,0,0.10);
-      transition: transform .12s, box-shadow .12s;
-    }
-    .nav-btn:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,0.10); }
-    .btn-prev { background:#EEE; color:#666; }
-    .btn-next { background:#5BA4F5; color:white; box-shadow:0 4px 0 #2A6FCC; }
+    .progress-fill { height:100%; border-radius:10px; background:linear-gradient(90deg,#FF6B6B,#FFB347); transition:width .4s ease; }
+    .progress-label { text-align:right; font-family:'Fredoka One',cursive; font-size:.88rem; color:#BBB; margin-top:4px; }
+    .flash-row { flex:1; display:flex; align-items:center; padding:12px 0; min-height:0; }
+    .side-btn { flex-shrink:0; width:58px; height:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; -webkit-tap-highlight-color:transparent; transition:opacity .15s,transform .12s; }
+    .side-btn:active { opacity:.45; transform:scale(.88); }
+    .side-pill { width:44px; height:88px; background:white; border-radius:16px; box-shadow:0 4px 0 rgba(0,0,0,.10),0 6px 16px rgba(0,0,0,.07); display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+    .flash-card { flex:1; margin:0 6px; border-radius:32px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:24px 16px; box-shadow:0 8px 0 rgba(0,0,0,.13),0 18px 48px rgba(0,0,0,.12); position:relative; overflow:hidden; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:background .4s; min-height:320px; max-height:480px; }
+    .flash-card::before { content:''; position:absolute; top:-25%; left:-15%; width:55%; height:55%; background:radial-gradient(circle,rgba(255,255,255,.26) 0%,transparent 70%); pointer-events:none; }
+    .fc-numeral { font-family:'Fredoka One',cursive; font-size:7rem; color:white; text-shadow:0 6px 14px rgba(0,0,0,.22); line-height:1; animation:float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-10px) scale(1.05);} }
+    .fc-word { font-family:'Fredoka One',cursive; font-size:2.4rem; color:rgba(255,255,255,.92); line-height:1; }
+    .fc-dots { display:flex; flex-wrap:wrap; justify-content:center; gap:5px; max-width:200px; }
+    .dot-item { font-size:1.6rem; animation:popDot .3s ease both; }
+    @keyframes popDot { 0%{transform:scale(0);opacity:0;} 70%{transform:scale(1.2);opacity:1;} 100%{transform:scale(1);opacity:1;} }
+    .fc-hint { position:absolute; bottom:14px; font-size:.74rem; color:rgba(255,255,255,.42); font-weight:700; letter-spacing:.5px; }
+    @keyframes flipIn { 0%{transform:rotateY(90deg) scale(.85);opacity:0;} 100%{transform:rotateY(0) scale(1);opacity:1;} }
+    .flash-card.flip { animation:flipIn .33s ease-out; }
+    @keyframes pulse { 0%,100%{box-shadow:0 8px 0 rgba(0,0,0,.13),0 18px 48px rgba(0,0,0,.12);} 50%{box-shadow:0 8px 0 rgba(0,0,0,.13),0 18px 56px rgba(0,0,0,.20),0 0 0 12px rgba(255,255,255,.26);} }
+    .flash-card.pulse { animation:pulse .55s ease; }
+    .listen-wrap { padding:0 20px 20px; flex-shrink:0; }
+    .listen-btn { width:100%; height:64px; border-radius:20px; border:none; background:linear-gradient(135deg,#FF6B6B,#FFB347); font-family:'Fredoka One',cursive; font-size:1.3rem; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 5px 0 #C0392B,0 8px 20px rgba(255,100,100,.28); transition:transform .12s,box-shadow .12s; }
+    .listen-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #C0392B; }
+    @keyframes btnPop { 0%,100%{transform:scale(1);} 30%{transform:scale(1.06);} 60%{transform:scale(.97);} }
+    .listen-btn.pop { animation:btnPop .4s ease; }
   </style>
 </head>
 <body>
-
-  <header class="header">
-    <a class="header-back" href="index.html">🏠</a>
-    <span class="header-title">🔢 Numbers</span>
-    <span class="header-star">⭐</span>
-  </header>
-
-  <nav class="tabs">
-    <button class="tab-btn active" id="tab1-btn" onclick="switchTab(1)">🗂️ All Numbers</button>
-    <button class="tab-btn"        id="tab2-btn" onclick="switchTab(2)">🃏 Flashcard</button>
-  </nav>
-
-  <!-- TAB 1 -->
-  <div class="panel active grid-panel" id="panel1">
-    <p class="grid-intro">TAP A NUMBER TO HEAR IT! 🔊</p>
-    <div class="number-grid" id="numberGrid"></div>
+<header class="header">
+  <a class="back-btn" href="index.html">🏠 Home</a>
+  <span class="header-title">🔢 Numbers</span>
+  <span style="font-size:26px">⭐</span>
+</header>
+<nav class="tabs">
+  <button class="tab-btn active" id="tab1-btn" onclick="switchTab(1)">🗂️ All Numbers</button>
+  <button class="tab-btn"        id="tab2-btn" onclick="switchTab(2)">🃏 Flashcard</button>
+</nav>
+<div class="panel active" id="panel1"></div>
+<div class="panel" id="panel2">
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="pFill" style="width:10%"></div></div>
+    <div class="progress-label" id="pLabel">1 / 10</div>
   </div>
-
-  <!-- TAB 2 -->
-  <div class="panel flash-panel" id="panel2">
-    <div class="progress-wrap">
-      <div class="progress-track">
-        <div class="progress-fill" id="progressFill" style="width:10%"></div>
-      </div>
-      <div class="progress-label" id="progressLabel">1 / 10</div>
+  <div class="flash-row">
+    <button class="side-btn" onclick="go(-1)"><div class="side-pill">◀</div></button>
+    <div class="flash-card" id="fCard" onclick="speakCurrent()">
+      <div class="fc-numeral" id="fNumeral">1</div>
+      <div class="fc-word"    id="fWord">One</div>
+      <div class="fc-dots"   id="fDots"></div>
+      <div class="fc-hint">👆 tap to hear</div>
     </div>
-    <div class="flash-card" id="flashCard" onclick="speakCurrent()">
-      <div class="fc-numeral" id="fcNumeral">1</div>
-      <div class="fc-word"    id="fcWord">One</div>
-      <div class="fc-dots"   id="fcDots"></div>
-      <div class="tap-hint">👆 tap to hear</div>
-    </div>
-    <button class="speak-btn" id="speakBtn" onclick="speakCurrent()">🔊 Listen</button>
-    <div class="flash-nav">
-      <button class="nav-btn btn-prev" onclick="prevNum()">◀ Back</button>
-      <button class="nav-btn btn-next" onclick="nextNum()">Next ▶</button>
-    </div>
+    <button class="side-btn" onclick="go(1)"><div class="side-pill">▶</div></button>
   </div>
-
-  <script>
-    const NUMBERS = [
-      { n:1,  word:'One',   emoji:'⭐', color:['#FF6B6B','#C0392B'] },
-      { n:2,  word:'Two',   emoji:'🌙', color:['#FF8E53','#923B00'] },
-      { n:3,  word:'Three', emoji:'🍀', color:['#FFD93D','#997A00'] },
-      { n:4,  word:'Four',  emoji:'🌸', color:['#6BCB77','#1A7A35'] },
-      { n:5,  word:'Five',  emoji:'🌟', color:['#3EC9A7','#0E6B52'] },
-      { n:6,  word:'Six',   emoji:'🎈', color:['#6DD5FA','#0077B6'] },
-      { n:7,  word:'Seven', emoji:'🦋', color:['#5BA4F5','#0A3D91'] },
-      { n:8,  word:'Eight', emoji:'🍎', color:['#7B61FF','#3A0088'] },
-      { n:9,  word:'Nine',  emoji:'🐾', color:['#C77DFF','#6A0DAD'] },
-      { n:10, word:'Ten',   emoji:'🎉', color:['#F76BB7','#8B0050'] },
-    ];
-
-    let current = 0;
-
-    function speak(text) {
-      if (!window.speechSynthesis) return;
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US'; u.rate = 0.78; u.pitch = 1.15;
-      window.speechSynthesis.speak(u);
-    }
-
-    function speakCurrent() {
-      const d = NUMBERS[current];
-      speak(`${d.word}. ${d.n}`);
-      const card = document.getElementById('flashCard');
-      card.classList.remove('speaking-pulse'); void card.offsetWidth;
-      card.classList.add('speaking-pulse');
-      setTimeout(() => card.classList.remove('speaking-pulse'), 700);
-      const btn = document.getElementById('speakBtn');
-      btn.classList.remove('active-anim'); void btn.offsetWidth;
-      btn.classList.add('active-anim');
-      setTimeout(() => btn.classList.remove('active-anim'), 500);
-    }
-
-    function buildGrid() {
-      const grid = document.getElementById('numberGrid');
-      NUMBERS.forEach((d, i) => {
-        const tile = document.createElement('button');
-        tile.className = 'number-tile';
-        tile.style.background = `linear-gradient(145deg, ${d.color[0]}, ${d.color[1]})`;
-        // build dot string (max 10)
-        const dots = d.emoji.repeat(Math.min(d.n, 10));
-        tile.innerHTML = `
-          <span class="tile-numeral">${d.n}</span>
-          <span class="tile-word">${d.word}</span>
-          <span class="tile-dots">${dots}</span>
-        `;
-        tile.addEventListener('click', () => {
-          speak(`${d.word}. ${d.n}`);
-          tile.classList.remove('speaking'); void tile.offsetWidth;
-          tile.classList.add('speaking');
-          setTimeout(() => tile.classList.remove('speaking'), 600);
-          current = i;
-        });
-        grid.appendChild(tile);
-      });
-    }
-
-    function buildDots(n, emoji) {
-      const container = document.getElementById('fcDots');
-      container.innerHTML = '';
-      for (let i = 0; i < n; i++) {
-        const span = document.createElement('span');
-        span.className = 'dot-item';
-        span.textContent = emoji;
-        span.style.animationDelay = (i * 60) + 'ms';
-        container.appendChild(span);
-      }
-    }
-
-    function updateCard(animate = true) {
-      const d = NUMBERS[current];
-      document.getElementById('fcNumeral').textContent    = d.n;
-      document.getElementById('fcWord').textContent       = d.word;
-      document.getElementById('flashCard').style.background = `linear-gradient(145deg, ${d.color[0]}, ${d.color[1]})`;
-      buildDots(d.n, d.emoji);
-      const pct = ((current + 1) / NUMBERS.length * 100).toFixed(0);
-      document.getElementById('progressFill').style.width  = pct + '%';
-      document.getElementById('progressLabel').textContent = `${current + 1} / ${NUMBERS.length}`;
-      if (animate) {
-        const card = document.getElementById('flashCard');
-        card.classList.remove('flip'); void card.offsetWidth; card.classList.add('flip');
-      }
-    }
-
-    function nextNum() { current = (current + 1) % NUMBERS.length; updateCard(); setTimeout(speakCurrent, 350); }
-    function prevNum() { current = (current - 1 + NUMBERS.length) % NUMBERS.length; updateCard(); setTimeout(speakCurrent, 350); }
-
-    function switchTab(n) {
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`panel${n}`).classList.add('active');
-      document.getElementById(`tab${n}-btn`).classList.add('active');
-      if (n === 2) { updateCard(false); setTimeout(speakCurrent, 400); }
-    }
-
-    buildGrid();
-    updateCard(false);
-  </script>
+  <div class="listen-wrap">
+    <button class="listen-btn" id="listenBtn" onclick="speakCurrent()">🔊 Listen</button>
+  </div>
+</div>
+<script>
+  var NUMBERS = [
+    {n:1, word:'One',   emoji:'⭐',c:['#FF6B6B','#C0392B']},
+    {n:2, word:'Two',   emoji:'🌙',c:['#FF8E53','#923B00']},
+    {n:3, word:'Three', emoji:'🍀',c:['#FFD93D','#997A00']},
+    {n:4, word:'Four',  emoji:'🌸',c:['#6BCB77','#1A7A35']},
+    {n:5, word:'Five',  emoji:'🌟',c:['#3EC9A7','#0E6B52']},
+    {n:6, word:'Six',   emoji:'🎈',c:['#6DD5FA','#0077B6']},
+    {n:7, word:'Seven', emoji:'🦋',c:['#5BA4F5','#0A3D91']},
+    {n:8, word:'Eight', emoji:'🍎',c:['#7B61FF','#3A0088']},
+    {n:9, word:'Nine',  emoji:'🐾',c:['#C77DFF','#6A0DAD']},
+    {n:10,word:'Ten',   emoji:'🎉',c:['#F76BB7','#8B0050']},
+  ];
+  var cur = 0;
+  function speak(txt) { if (!window.speechSynthesis) return; window.speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(txt); u.lang='en-US'; u.rate=0.78; u.pitch=1.15; window.speechSynthesis.speak(u); }
+  function speakCurrent() { var d=NUMBERS[cur]; speak(d.word+'. '+d.n); var c=document.getElementById('fCard'); c.classList.remove('pulse'); void c.offsetWidth; c.classList.add('pulse'); setTimeout(function(){c.classList.remove('pulse');},600); var b=document.getElementById('listenBtn'); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); setTimeout(function(){b.classList.remove('pop');},450); }
+  function buildDots(n,emoji) { var c=document.getElementById('fDots'); c.innerHTML=''; for(var i=0;i<n;i++){var s=document.createElement('span'); s.className='dot-item'; s.textContent=emoji; s.style.animationDelay=(i*60)+'ms'; c.appendChild(s);} }
+  function buildList() { var panel=document.getElementById('panel1'); NUMBERS.forEach(function(d,i){ var btn=document.createElement('button'); btn.className='number-card'; btn.style.background='linear-gradient(150deg,'+d.c[0]+','+d.c[1]+')'; var dots=d.emoji.repeat(d.n); btn.innerHTML='<span class="ac-numeral">'+d.n+'</span><span class="ac-word">'+d.word+'</span><div class="ac-dots">'+dots+'</div><span class="ac-hint">👆 tap to hear</span>'; btn.addEventListener('click',function(){ speak(d.word+'. '+d.n); btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop'); setTimeout(function(){btn.classList.remove('pop');},500); cur=i; }); panel.appendChild(btn); }); }
+  function updateCard(anim) { var d=NUMBERS[cur]; document.getElementById('fNumeral').textContent=d.n; document.getElementById('fWord').textContent=d.word; document.getElementById('fCard').style.background='linear-gradient(150deg,'+d.c[0]+','+d.c[1]+')'; buildDots(d.n,d.emoji); var pct=((cur+1)/NUMBERS.length*100).toFixed(0); document.getElementById('pFill').style.width=pct+'%'; document.getElementById('pLabel').textContent=(cur+1)+' / '+NUMBERS.length; if(anim){var c=document.getElementById('fCard'); c.classList.remove('flip'); void c.offsetWidth; c.classList.add('flip');} }
+  function go(dir) { cur=(cur+dir+NUMBERS.length)%NUMBERS.length; updateCard(true); setTimeout(speakCurrent,340); }
+  function switchTab(n) { document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');}); document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');}); document.getElementById('panel'+n).classList.add('active'); document.getElementById('tab'+n+'-btn').classList.add('active'); if(n===2){updateCard(false);setTimeout(speakCurrent,420);} }
+  buildList(); updateCard(false);
+</script>
 </body>
 </html>

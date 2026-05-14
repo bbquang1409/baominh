@@ -1,415 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
   <title>🔷 Shapes · Baby English</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --bg: #FFFDF7;
-      --dark: #2B2B2B;
-      --header-h: 64px;
-      --tab-h: 64px;
-      --accent: #C77DFF;
-    }
+    :root { --bg:#FFFDF7; --dark:#2B2B2B; --header-h:64px; --tab-h:60px; }
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--bg);
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      overflow-x: hidden;
-    }
+    body { font-family:'Nunito',sans-serif; background:var(--bg); min-height:100vh; display:flex; flex-direction:column; overflow-x:hidden; }
 
-    /* HEADER */
-    .header {
-      height: var(--header-h);
-      background: linear-gradient(135deg, #F8F0FF, #EDE0FF);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 16px;
-      position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    }
-    .header-back { text-decoration:none; font-size:26px; }
+    .header { height:var(--header-h); background:linear-gradient(135deg,#F0E8FF,#DDD0FF); display:flex; align-items:center; justify-content:space-between; padding:0 16px; position:sticky; top:0; z-index:100; box-shadow:0 2px 14px rgba(0,0,0,.10); }
+    .back-btn { text-decoration:none; display:flex; align-items:center; gap:6px; background:white; border-radius:14px; padding:7px 14px 7px 10px; font-family:'Fredoka One',cursive; font-size:1rem; color:var(--dark); box-shadow:0 2px 8px rgba(0,0,0,.12); }
     .header-title { font-family:'Fredoka One',cursive; font-size:1.5rem; color:var(--dark); }
-    .header-star  { font-size:26px; }
 
-    /* TABS */
-    .tabs {
-      display:flex; background:#fff;
-      border-bottom:3px solid #EEE;
-      position:sticky; top:var(--header-h); z-index:99;
-    }
-    .tab-btn {
-      flex:1; height:var(--tab-h); border:none; background:transparent;
-      font-family:'Fredoka One',cursive; font-size:1.05rem; color:#AAA;
-      cursor:pointer; border-bottom:4px solid transparent;
-      display:flex; align-items:center; justify-content:center; gap:8px;
-      transition: color .2s, border-bottom .2s;
-    }
-    .tab-btn.active { color:var(--dark); border-bottom:4px solid var(--accent); }
+    .tabs { display:flex; background:#fff; border-bottom:3px solid #EEE; position:sticky; top:var(--header-h); z-index:99; }
+    .tab-btn { flex:1; height:var(--tab-h); border:none; background:transparent; font-family:'Fredoka One',cursive; font-size:1.05rem; color:#AAA; cursor:pointer; border-bottom:4px solid transparent; display:flex; align-items:center; justify-content:center; gap:8px; transition:color .2s,border-bottom .2s; }
+    .tab-btn.active { color:var(--dark); border-bottom:4px solid #C77DFF; }
 
     .panel { display:none; }
     .panel.active { display:block; }
+    #panel2 { display:none; flex-direction:column; min-height:calc(100vh - var(--header-h) - var(--tab-h)); }
+    #panel2.active { display:flex; }
 
-    /* TAB 1 — GRID */
-    .grid-panel { padding: 16px 14px 40px; }
-    .grid-intro {
-      text-align:center; font-size:0.88rem; color:#999;
-      font-weight:700; margin-bottom:14px; letter-spacing:0.5px;
-    }
-    .shape-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      max-width: 480px;
-      margin: 0 auto;
-    }
-    .shape-tile {
-      border-radius: 24px;
-      padding: 22px 12px 18px;
-      display: flex; flex-direction: column;
-      align-items: center; gap: 10px;
-      cursor: pointer; border: none;
-      user-select: none; -webkit-tap-highlight-color: transparent;
-      box-shadow: 0 6px 0 rgba(0,0,0,0.13), 0 10px 24px rgba(0,0,0,0.08);
-      transition: transform .12s, box-shadow .12s;
-    }
-    .shape-tile:active {
-      transform: translateY(5px) scale(0.96);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.13), 0 4px 12px rgba(0,0,0,0.08);
-    }
+    #panel1 { padding:16px 16px 48px; }
+    .shape-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; width:100%; min-height:280px; border-radius:28px; margin-bottom:16px; padding:32px 16px 28px; border:none; cursor:pointer; position:relative; overflow:hidden; box-shadow:0 6px 0 rgba(0,0,0,.14),0 10px 28px rgba(0,0,0,.10); transition:transform .13s,box-shadow .13s; -webkit-tap-highlight-color:transparent; }
+    .shape-card::before { content:''; position:absolute; top:-28%; left:-18%; width:56%; height:56%; background:radial-gradient(circle,rgba(255,255,255,.22) 0%,transparent 70%); pointer-events:none; }
+    .shape-card:active { transform:translateY(4px) scale(.97); box-shadow:0 2px 0 rgba(0,0,0,.14),0 4px 10px rgba(0,0,0,.10); }
+    .ac-svg { animation:floatSVG 3s ease-in-out infinite; filter:drop-shadow(0 6px 12px rgba(0,0,0,.20)); }
+    @keyframes floatSVG { 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-10px) rotate(2deg);} }
+    .ac-name    { font-family:'Fredoka One',cursive; font-size:2.6rem; color:white; text-shadow:0 3px 8px rgba(0,0,0,.22); }
+    .ac-example { font-family:'Fredoka One',cursive; font-size:1.1rem; color:rgba(255,255,255,.82); text-align:center; }
+    .ac-hint    { font-size:.76rem; color:rgba(255,255,255,.48); font-weight:700; letter-spacing:.5px; margin-top:4px; }
+    @keyframes popCard { 0%{transform:scale(1);} 35%{transform:scale(1.03) rotate(-1deg);} 65%{transform:scale(.98);} 100%{transform:scale(1);} }
+    .shape-card.pop { animation:popCard .45s ease; }
 
-    /* SVG shape inside tile */
-    .shape-svg {
-      width: 72px; height: 72px;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.18));
-      flex-shrink: 0;
-    }
-
-    .shape-name {
-      font-family: 'Fredoka One', cursive;
-      font-size: 1.3rem;
-      color: white;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
-    .shape-example {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: rgba(255,255,255,0.8);
-    }
-
-    @keyframes pop {
-      0%   { transform: scale(1); }
-      35%  { transform: scale(1.14) rotate(-4deg); }
-      65%  { transform: scale(0.94) rotate(3deg); }
-      100% { transform: scale(1); }
-    }
-    .shape-tile.speaking { animation: pop .5s ease; }
-
-    /* TAB 2 — FLASHCARD */
-    .flash-panel {
-      padding: 16px 20px 40px;
-      display: flex; flex-direction: column; align-items: center; gap: 16px;
-    }
-    .progress-wrap { width:100%; max-width:400px; }
+    .progress-wrap { padding:14px 20px 0; flex-shrink:0; }
     .progress-track { height:10px; background:#EEE; border-radius:10px; overflow:hidden; }
-    .progress-fill  { height:100%; border-radius:10px; transition:width .4s ease; }
-    .progress-label { text-align:right; font-family:'Fredoka One',cursive; font-size:0.9rem; color:#BBB; margin-top:4px; }
+    .progress-fill  { height:100%; border-radius:10px; background:linear-gradient(90deg,#C77DFF,#7B61FF); transition:width .4s ease; }
+    .progress-label { text-align:right; font-family:'Fredoka One',cursive; font-size:.88rem; color:#BBB; margin-top:4px; }
 
-    .flash-card {
-      width:100%; max-width:340px;
-      border-radius: 40px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 36px 24px 28px;
-      gap: 14px;
-      min-height: 360px;
-      box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 20px 50px rgba(0,0,0,0.12);
-      position: relative; overflow: hidden;
-      cursor: pointer; user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      transition: background .4s;
-    }
-    .flash-card::before {
-      content:'';
-      position:absolute; top:-25%; left:-15%;
-      width:55%; height:55%;
-      background: radial-gradient(circle, rgba(255,255,255,0.32) 0%, transparent 70%);
-      pointer-events:none;
-    }
+    .flash-row { flex:1; display:flex; align-items:center; padding:12px 0; min-height:0; }
+    .side-btn { flex-shrink:0; width:58px; height:100%; border:none; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; -webkit-tap-highlight-color:transparent; transition:opacity .15s,transform .12s; }
+    .side-btn:active { opacity:.45; transform:scale(.88); }
+    .side-pill { width:44px; height:88px; background:white; border-radius:16px; box-shadow:0 4px 0 rgba(0,0,0,.10),0 6px 16px rgba(0,0,0,.07); display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
 
-    /* Big shape SVG in flashcard */
-    .fc-shape-wrap {
-      width: 150px; height: 150px;
-      display: flex; align-items: center; justify-content: center;
-      animation: floatShape 3s ease-in-out infinite;
-      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.22));
-    }
-    @keyframes floatShape {
-      0%,100% { transform: translateY(0) scale(1); }
-      50%      { transform: translateY(-12px) scale(1.05); }
-    }
+    .flash-card { flex:1; margin:0 6px; border-radius:32px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:24px 16px; box-shadow:0 8px 0 rgba(0,0,0,.13),0 18px 48px rgba(0,0,0,.12); position:relative; overflow:hidden; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:background .4s; min-height:320px; max-height:480px; }
+    .flash-card::before { content:''; position:absolute; top:-25%; left:-15%; width:55%; height:55%; background:radial-gradient(circle,rgba(255,255,255,.26) 0%,transparent 70%); pointer-events:none; }
+    .fc-svg     { animation:floatFC 3s ease-in-out infinite; filter:drop-shadow(0 6px 14px rgba(0,0,0,.20)); }
+    @keyframes floatFC { 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-12px) rotate(2deg);} }
+    .fc-name    { font-family:'Fredoka One',cursive; font-size:2.8rem; color:white; text-shadow:0 4px 10px rgba(0,0,0,.20); line-height:1; }
+    .fc-example { font-family:'Fredoka One',cursive; font-size:1.05rem; color:rgba(255,255,255,.82); text-align:center; }
+    .fc-hint    { position:absolute; bottom:14px; font-size:.74rem; color:rgba(255,255,255,.42); font-weight:700; letter-spacing:.5px; }
 
-    .fc-shape-name {
-      font-family: 'Fredoka One', cursive;
-      font-size: 2.6rem;
-      color: white;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      line-height: 1;
-    }
-    .fc-example {
-      font-family: 'Fredoka One', cursive;
-      font-size: 1.1rem;
-      color: rgba(255,255,255,0.85);
-      text-align: center;
-    }
-    .tap-hint {
-      position:absolute; bottom:14px;
-      font-size:0.78rem; color:rgba(255,255,255,0.55);
-      font-weight:700; letter-spacing:0.5px;
-    }
+    @keyframes flipIn { 0%{transform:rotateY(90deg) scale(.85);opacity:0;} 100%{transform:rotateY(0) scale(1);opacity:1;} }
+    .flash-card.flip { animation:flipIn .33s ease-out; }
+    @keyframes pulse { 0%,100%{box-shadow:0 8px 0 rgba(0,0,0,.13),0 18px 48px rgba(0,0,0,.12);} 50%{box-shadow:0 8px 0 rgba(0,0,0,.13),0 18px 56px rgba(0,0,0,.20),0 0 0 12px rgba(255,255,255,.26);} }
+    .flash-card.pulse { animation:pulse .55s ease; }
 
-    @keyframes flipIn {
-      0%   { transform: rotateY(90deg) scale(0.8); opacity:0; }
-      100% { transform: rotateY(0)     scale(1);   opacity:1; }
-    }
-    .flash-card.flip { animation: flipIn .35s ease-out; }
-    @keyframes speakPulse {
-      0%,100% { box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 20px 50px rgba(0,0,0,0.12); }
-      50%      { box-shadow: 0 8px 0 rgba(0,0,0,0.13), 0 20px 60px rgba(0,0,0,0.2), 0 0 0 14px rgba(255,255,255,0.28); }
-    }
-    .flash-card.speaking-pulse { animation: speakPulse .6s ease; }
-
-    .speak-btn {
-      width:100%; max-width:340px; height:68px;
-      border-radius:22px; border:none;
-      background: linear-gradient(135deg,#C77DFF,#9B41E8);
-      font-family:'Fredoka One',cursive; font-size:1.35rem;
-      color:white; cursor:pointer;
-      display:flex; align-items:center; justify-content:center; gap:10px;
-      box-shadow: 0 5px 0 #6A0DAD, 0 8px 24px rgba(180,100,255,0.3);
-      transition: transform .12s, box-shadow .12s;
-    }
-    .speak-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #6A0DAD; }
-    @keyframes btnBounce {
-      0%,100% { transform:scale(1); }
-      30%      { transform:scale(1.07); }
-      60%      { transform:scale(0.96); }
-    }
-    .speak-btn.active-anim { animation: btnBounce .45s ease; }
-
-    .flash-nav { display:flex; gap:16px; width:100%; max-width:340px; }
-    .nav-btn {
-      flex:1; height:58px; border-radius:18px; border:none;
-      font-family:'Fredoka One',cursive; font-size:1rem;
-      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
-      box-shadow:0 4px 0 rgba(0,0,0,0.10);
-      transition: transform .12s, box-shadow .12s;
-    }
-    .nav-btn:active { transform:translateY(3px); box-shadow:0 1px 0 rgba(0,0,0,0.10); }
-    .btn-prev { background:#EEE; color:#666; }
-    .btn-next { background:#5BA4F5; color:white; box-shadow:0 4px 0 #2A6FCC; }
+    .listen-wrap { padding:0 20px 20px; flex-shrink:0; }
+    .listen-btn { width:100%; height:64px; border-radius:20px; border:none; background:linear-gradient(135deg,#C77DFF,#7B61FF); font-family:'Fredoka One',cursive; font-size:1.3rem; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 5px 0 #6A0DAD,0 8px 20px rgba(199,125,255,.28); transition:transform .12s,box-shadow .12s; }
+    .listen-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #6A0DAD; }
+    @keyframes btnPop { 0%,100%{transform:scale(1);} 30%{transform:scale(1.06);} 60%{transform:scale(.97);} }
+    .listen-btn.pop { animation:btnPop .4s ease; }
   </style>
 </head>
 <body>
 
-  <header class="header">
-    <a class="header-back" href="index.html">&#127968;</a>
-    <span class="header-title">&#128311; Shapes</span>
-    <span class="header-star">&#11088;</span>
-  </header>
+<header class="header">
+  <a class="back-btn" href="index.html">🏠 Home</a>
+  <span class="header-title">🔷 Shapes</span>
+  <span style="font-size:26px">✨</span>
+</header>
 
-  <nav class="tabs">
-    <button class="tab-btn active" id="tab1-btn" onclick="switchTab(1)">&#128193; All Shapes</button>
-    <button class="tab-btn"        id="tab2-btn" onclick="switchTab(2)">&#127183; Flashcard</button>
-  </nav>
+<nav class="tabs">
+  <button class="tab-btn active" id="tab1-btn" onclick="switchTab(1)">🗂️ All Shapes</button>
+  <button class="tab-btn"        id="tab2-btn" onclick="switchTab(2)">🃏 Flashcard</button>
+</nav>
 
-  <div class="panel active grid-panel" id="panel1">
-    <p class="grid-intro">TAP A SHAPE TO HEAR IT! &#128266;</p>
-    <div class="shape-grid" id="shapeGrid"></div>
+<div class="panel active" id="panel1"></div>
+
+<div class="panel" id="panel2">
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="pFill" style="width:11.1%"></div></div>
+    <div class="progress-label" id="pLabel">1 / 9</div>
   </div>
-
-  <div class="panel flash-panel" id="panel2">
-    <div class="progress-wrap">
-      <div class="progress-track">
-        <div class="progress-fill" id="progressFill" style="width:11.1%"></div>
-      </div>
-      <div class="progress-label" id="progressLabel">1 / 9</div>
+  <div class="flash-row">
+    <button class="side-btn" onclick="go(-1)"><div class="side-pill">◀</div></button>
+    <div class="flash-card" id="fCard" onclick="speakCurrent()">
+      <div class="fc-svg"     id="fSVG"></div>
+      <div class="fc-name"    id="fName">Circle</div>
+      <div class="fc-example" id="fExample">☀️ Sun · 🏀 Ball</div>
+      <div class="fc-hint">👆 tap to hear</div>
     </div>
-    <div class="flash-card" id="flashCard" onclick="speakCurrent()">
-      <div class="fc-shape-wrap" id="fcShapeWrap"></div>
-      <div class="fc-shape-name" id="fcName">Circle</div>
-      <div class="fc-example"   id="fcExample"></div>
-      <div class="tap-hint">&#128070; tap to hear</div>
-    </div>
-    <button class="speak-btn" id="speakBtn" onclick="speakCurrent()">&#128266; Listen</button>
-    <div class="flash-nav">
-      <button class="nav-btn btn-prev" onclick="prevShape()">&#9664; Back</button>
-      <button class="nav-btn btn-next" onclick="nextShape()">Next &#9654;</button>
-    </div>
+    <button class="side-btn" onclick="go(1)"><div class="side-pill">▶</div></button>
   </div>
+  <div class="listen-wrap">
+    <button class="listen-btn" id="listenBtn" onclick="speakCurrent()">🔊 Listen</button>
+  </div>
+</div>
 
-  <script>
-    // Each shape has: name, bg gradient, SVG path data, fill color, example text
-    const SHAPES = [
-      {
-        name: 'Circle',
-        bg: ['#C77DFF','#6A0DAD'],
-        fill: 'rgba(255,255,255,0.9)',
-        svg: '<circle cx="60" cy="60" r="52" />',
-        example: '&#127775; Sun  &#9679; Ball  &#127968; Clock',
-        vb: '0 0 120 120'
-      },
-      {
-        name: 'Square',
-        bg: ['#5BA4F5','#0A3D91'],
-        fill: 'rgba(255,255,255,0.9)',
-        svg: '<rect x="10" y="10" width="100" height="100" rx="8" />',
-        example: '&#127381; Box  &#9726; Window  &#127384; Frame',
-        vb: '0 0 120 120'
-      },
-      {
-        name: 'Triangle',
-        bg: ['#FF6B6B','#C0392B'],
-        fill: 'rgba(255,255,255,0.9)',
-        svg: '<polygon points="60,8 112,112 8,112" />',
-        example: '&#9650; Arrow  &#127869; Pizza  &#127956; Mountain',
-        vb: '0 0 120 120'
-      },
-      {
-        name: 'Rectangle',
-        bg: ['#6BCB77','#1A7A35'],
-        fill: 'rgba(255,255,255,0.9)',
-        svg: '<rect x="6" y="28" width="108" height="64" rx="8" />',
-        example: '&#128214; Book  &#128247; Phone  &#127968; Door',
-        vb: '0 0 120 120'
-      },
-      {
-        name: 'Oval',
-        bg: ['#FFB347','#CC6600'],
-        fill: 'rgba(255,255,255,0.9)',
-        svg: '<ellipse cx="60" cy="60" rx="54" ry="36" />',
-        example: '&#129381; Egg  &#127825; Berry  &#128065; Eye',
-        vb: '0 0 120 120'
-      },
-      {
-        name: 'Star',
-        bg: ['#FFD93D','#997A00'],
-        fill: 'rgba(255,255,255,0.9)',
-        svg: '<polygon points="60,5 74,42 114,42 82,65 94,102 60,80 26,102 38,65 6,42 46,42" />',
-        example: '&#11088; Star  &#127752; Badge  &#9733; Award',
-        vb: '0 0 120 120'
-      },
-      {
-        name: 'Heart',
-        bg: ['#F76BB7','#8B0050'],
-        fill: 'rgba(255,255,255,0.9)',
-        svg: '<path d="M60,100 C20,72 4,50 4,34 C4,18 16,8 30,8 C42,8 54,16 60,26 C66,16 78,8 90,8 C104,8 116,18 116,34 C116,50 100,72 60,100Z" />',
-        example: '&#10084; Love  &#129505; Balloon  &#129724; Cookie',
-        vb: '0 0 120 120'
-      },
-      {
-        name: 'Diamond',
-        bg: ['#3EC9A7','#0E6B52'],
-        fill: 'rgba(255,255,255,0.9)',
-        svg: '<polygon points="60,6 114,60 60,114 6,60" />',
-        example: '&#128142; Gem  &#9830; Card  &#129523; Kite',
-        vb: '0 0 120 120'
-      },
-      {
-        name: 'Pentagon',
-        bg: ['#FF8E53','#923B00'],
-        fill: 'rgba(255,255,255,0.9)',
-        svg: '<polygon points="60,6 113,44 92,108 28,108 7,44" />',
-        example: '&#9977; Field  &#127963; Home  &#128736; Sign',
-        vb: '0 0 120 120'
-      },
-    ];
+<script>
+  var SHAPES = [
+    { name:'Circle',    bg:['#C77DFF','#6A0DAD'], fill:'#EDD9FF', vb:'0 0 120 120', svg:'<circle cx="60" cy="60" r="52"/>',                                                                                                                          example:'☀️ Sun · 🏀 Ball · 🌕 Moon' },
+    { name:'Square',    bg:['#5BA4F5','#0A3D91'], fill:'#D6E8FF', vb:'0 0 120 120', svg:'<rect x="10" y="10" width="100" height="100" rx="8"/>',                                                                                                     example:'📦 Box · 🪟 Window · 🖼️ Frame' },
+    { name:'Triangle',  bg:['#FF6B6B','#C0392B'], fill:'#FFD6D6', vb:'0 0 120 120', svg:'<polygon points="60,8 112,112 8,112"/>',                                                                                                                    example:'⛰️ Mountain · 🍕 Pizza · ▲ Arrow' },
+    { name:'Rectangle', bg:['#6BCB77','#1A7A35'], fill:'#D4F5DA', vb:'0 0 120 120', svg:'<rect x="6" y="28" width="108" height="64" rx="8"/>',                                                                                                      example:'📱 Phone · 📖 Book · 🚪 Door' },
+    { name:'Oval',      bg:['#FFB347','#CC6600'], fill:'#FFE8C0', vb:'0 0 120 120', svg:'<ellipse cx="60" cy="60" rx="54" ry="36"/>',                                                                                                                example:'🥚 Egg · 🫐 Berry · 👁️ Eye' },
+    { name:'Star',      bg:['#FFD93D','#997A00'], fill:'#FFF3A0', vb:'0 0 120 120', svg:'<polygon points="60,5 74,42 114,42 82,65 94,102 60,80 26,102 38,65 6,42 46,42"/>',                                                                         example:'⭐ Star · 🏅 Badge · ✨ Sparkle' },
+    { name:'Heart',     bg:['#F76BB7','#8B0050'], fill:'#FFD6EE', vb:'0 0 120 120', svg:'<path d="M60,100 C20,72 4,50 4,34 C4,18 16,8 30,8 C42,8 54,16 60,26 C66,16 78,8 90,8 C104,8 116,18 116,34 C116,50 100,72 60,100Z"/>',                   example:'❤️ Love · 🍓 Strawberry · 💝 Gift' },
+    { name:'Diamond',   bg:['#3EC9A7','#0E6B52'], fill:'#C0F5E8', vb:'0 0 120 120', svg:'<polygon points="60,6 114,60 60,114 6,60"/>',                                                                                                              example:'💎 Gem · 🃏 Card · 🪁 Kite' },
+    { name:'Pentagon',  bg:['#FF8E53','#923B00'], fill:'#FFD6B8', vb:'0 0 120 120', svg:'<polygon points="60,6 113,44 92,108 28,108 7,44"/>',                                                                                                       example:'⚽ Field · 🏠 Home · 🛑 Sign' },
+  ];
 
-    let current = 0;
+  var cur = 0;
 
-    function speak(text) {
-      if (!window.speechSynthesis) return;
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US'; u.rate = 0.80; u.pitch = 1.15;
-      window.speechSynthesis.speak(u);
-    }
+  function makeSVG(s, size) {
+    return '<svg viewBox="' + s.vb + '" width="' + size + '" height="' + size + '" xmlns="http://www.w3.org/2000/svg">'
+      + '<defs><filter id="sf' + size + '"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,0.18)"/></filter></defs>'
+      + '<g fill="' + s.fill + '" filter="url(#sf' + size + ')">' + s.svg + '</g>'
+      + '</svg>';
+  }
 
-    function makeSVG(s, size) {
-      return `<svg viewBox="${s.vb}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
-        <g fill="${s.fill}" filter="url(#sh)">
-          <defs><filter id="sh"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.25"/></filter></defs>
-          ${s.svg}
-        </g>
-      </svg>`;
-    }
+  function speak(txt) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(txt);
+    u.lang = 'en-US'; u.rate = 0.80; u.pitch = 1.15;
+    window.speechSynthesis.speak(u);
+  }
 
-    function speakCurrent() {
-      speak(SHAPES[current].name);
-      const card = document.getElementById('flashCard');
-      card.classList.remove('speaking-pulse'); void card.offsetWidth;
-      card.classList.add('speaking-pulse');
-      setTimeout(() => card.classList.remove('speaking-pulse'), 700);
-      const btn = document.getElementById('speakBtn');
-      btn.classList.remove('active-anim'); void btn.offsetWidth;
-      btn.classList.add('active-anim');
-      setTimeout(() => btn.classList.remove('active-anim'), 500);
-    }
+  function speakCurrent() {
+    speak(SHAPES[cur].name);
+    var c = document.getElementById('fCard');
+    c.classList.remove('pulse'); void c.offsetWidth; c.classList.add('pulse');
+    setTimeout(function(){ c.classList.remove('pulse'); }, 600);
+    var b = document.getElementById('listenBtn');
+    b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+    setTimeout(function(){ b.classList.remove('pop'); }, 450);
+  }
 
-    function buildGrid() {
-      const grid = document.getElementById('shapeGrid');
-      SHAPES.forEach((s, i) => {
-        const tile = document.createElement('button');
-        tile.className = 'shape-tile';
-        tile.style.background = `linear-gradient(145deg, ${s.bg[0]}, ${s.bg[1]})`;
-        tile.innerHTML = `
-          <div class="shape-svg">${makeSVG(s, 72)}</div>
-          <span class="shape-name">${s.name}</span>
-          <span class="shape-example">${s.example}</span>
-        `;
-        tile.addEventListener('click', () => {
-          speak(s.name);
-          tile.classList.remove('speaking'); void tile.offsetWidth;
-          tile.classList.add('speaking');
-          setTimeout(() => tile.classList.remove('speaking'), 600);
-          current = i;
-        });
-        grid.appendChild(tile);
+  function buildList() {
+    var panel = document.getElementById('panel1');
+    SHAPES.forEach(function(s, i) {
+      var btn = document.createElement('button');
+      btn.className = 'shape-card';
+      btn.style.background = 'linear-gradient(150deg,' + s.bg[0] + ',' + s.bg[1] + ')';
+      btn.innerHTML =
+        '<div class="ac-svg">' + makeSVG(s, 110) + '</div>' +
+        '<span class="ac-name">' + s.name + '</span>' +
+        '<span class="ac-example">' + s.example + '</span>' +
+        '<span class="ac-hint">👆 tap to hear</span>';
+      btn.addEventListener('click', function() {
+        speak(s.name);
+        btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
+        setTimeout(function(){ btn.classList.remove('pop'); }, 500);
+        cur = i;
       });
+      panel.appendChild(btn);
+    });
+  }
+
+  function updateCard(anim) {
+    var s = SHAPES[cur];
+    document.getElementById('fSVG').innerHTML     = makeSVG(s, 130);
+    document.getElementById('fName').textContent  = s.name;
+    document.getElementById('fExample').innerHTML = s.example;
+    document.getElementById('fCard').style.background = 'linear-gradient(150deg,' + s.bg[0] + ',' + s.bg[1] + ')';
+    var pct = ((cur + 1) / SHAPES.length * 100).toFixed(1);
+    document.getElementById('pFill').style.width  = pct + '%';
+    document.getElementById('pLabel').textContent = (cur + 1) + ' / ' + SHAPES.length;
+    if (anim) {
+      var c = document.getElementById('fCard');
+      c.classList.remove('flip'); void c.offsetWidth; c.classList.add('flip');
     }
+  }
 
-    function updateCard(animate = true) {
-      const s = SHAPES[current];
-      document.getElementById('fcShapeWrap').innerHTML = makeSVG(s, 150);
-      document.getElementById('fcName').textContent    = s.name;
-      document.getElementById('fcExample').innerHTML   = s.example;
-      document.getElementById('flashCard').style.background = `linear-gradient(145deg, ${s.bg[0]}, ${s.bg[1]})`;
-      const pct = ((current + 1) / SHAPES.length * 100).toFixed(1);
-      document.getElementById('progressFill').style.width      = pct + '%';
-      document.getElementById('progressFill').style.background = `linear-gradient(90deg, ${s.bg[0]}, ${s.bg[1]})`;
-      document.getElementById('progressLabel').textContent     = `${current + 1} / ${SHAPES.length}`;
-      if (animate) {
-        const card = document.getElementById('flashCard');
-        card.classList.remove('flip'); void card.offsetWidth; card.classList.add('flip');
-      }
-    }
+  function go(dir) {
+    cur = (cur + dir + SHAPES.length) % SHAPES.length;
+    updateCard(true);
+    setTimeout(speakCurrent, 340);
+  }
 
-    function nextShape() { current = (current + 1) % SHAPES.length; updateCard(); setTimeout(speakCurrent, 350); }
-    function prevShape() { current = (current - 1 + SHAPES.length) % SHAPES.length; updateCard(); setTimeout(speakCurrent, 350); }
+  function switchTab(n) {
+    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.getElementById('panel' + n).classList.add('active');
+    document.getElementById('tab' + n + '-btn').classList.add('active');
+    if (n === 2) { updateCard(false); setTimeout(speakCurrent, 420); }
+  }
 
-    function switchTab(n) {
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`panel${n}`).classList.add('active');
-      document.getElementById(`tab${n}-btn`).classList.add('active');
-      if (n === 2) { updateCard(false); setTimeout(speakCurrent, 400); }
-    }
-
-    buildGrid();
-    updateCard(false);
-  </script>
+  buildList();
+  updateCard(false);
+</script>
 </body>
 </html>
